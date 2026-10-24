@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Monstro</title>
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#1d1026">
+
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js"></script>
+
+<style>
+  :root {
+    --noite: #1d1026;
+    --nevoa: #35234a;
+    --osso: #f0e8d4;
+    --abobora: #ff7a1a;
+    --abobora-escura: #c24f00;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 50% 42%, var(--nevoa) 0%, var(--noite) 72%);
+  }
+
+  model-viewer {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    --poster-color: transparent;
+    background: transparent;
+    outline: none;
+  }
+
+  .trilho {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: min(60%, 260px);
+    height: 6px;
+    transform: translate(-50%, -50%);
+    border-radius: 999px;
+    background: rgba(240, 232, 212, 0.18);
+    overflow: hidden;
+    transition: opacity 0.4s ease;
+  }
+  .barra {
+    height: 100%;
+    width: 0%;
+    background: var(--abobora);
+    border-radius: inherit;
+    transition: width 0.2s ease;
+  }
+  model-viewer[loaded] .trilho { opacity: 0; pointer-events: none; }
+
+  .botao-ar {
+    position: absolute;
+    left: 50%;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
+    transform: translateX(-50%);
+    width: min(88%, 380px);
+    padding: 17px 24px;
+    border: 0;
+    border-radius: 18px;
+    background: var(--abobora);
+    color: #1d1026;
+    font: 700 1.1rem/1.2 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    cursor: pointer;
+    box-shadow: 0 6px 0 var(--abobora-escura);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .botao-ar:active {
+    transform: translateX(-50%) translateY(4px);
+    box-shadow: 0 2px 0 var(--abobora-escura);
+  }
+  .botao-ar:focus-visible {
+    outline: 3px solid var(--osso);
+    outline-offset: 4px;
+  }
+</style>
+</head>
+<body>
+
+  <model-viewer
+    src="Monstro.glb"
+    alt="Monstro animado"
+    ar
+    ar-modes="webxr scene-viewer quick-look"
+    ar-scale="fixed"
+    ar-placement="floor"
+    autoplay
+    camera-controls
+    interaction-prompt="none"
+    shadow-intensity="1"
+    shadow-softness="0.8"
+    environment-image="neutral"
+    exposure="1.1"
+    loading="eager"
+    reveal="auto">
+
+    <div class="trilho" slot="progress-bar"><div class="barra" id="barra"></div></div>
+
+    <button class="botao-ar" slot="ar-button">Ver em tamanho real</button>
+  </model-viewer>
+
+  <script>
+    var viewer = document.querySelector("model-viewer");
+    var barra = document.getElementById("barra");
+    viewer.addEventListener("progress", function (e) {
+      barra.style.width = Math.round(e.detail.totalProgress * 100) + "%";
+    });
+  </script>
+</body>
+</html>
